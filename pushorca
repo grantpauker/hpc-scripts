@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+source $(dirname $0)/api
+push(){
+	echo "$1: $2"
+	return
+	curl --silent \
+	-u "$PUSHBULLET_API:" \
+	-d type="note" \
+	-d title="$1" \
+	-d body="$2" \
+	"https://api.pushbullet.com/v2/pushes"
+}
+file="${1%.*}"
+output=$file.out
+if :; then # check if command not running
+	if grep -q "HURRAY" $output; then
+		if grep -q "imaginary" $output; then
+			push "$file" "Reached imaginary state"
+		else
+			push "$file" "Reached HURRAY state"
+		fi
+	else
+		push "$file" "Command failed"
+	fi
+else
+	push "$file" "Command still running"
+fi
