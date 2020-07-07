@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # replace ::ORBITAL:: with filename.gbw
 # replace ::CHARGE:: with charge and spin
-# replace ::COORDS:: with nafileme.xyz
+# replace ::COORDS:: with filename.xyz
 template=PBE0
 
 make_pbe0(){

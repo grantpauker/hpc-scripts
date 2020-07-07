@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # INCOMPLETE
 # use pushbullet to notify about suborca tasks
-#
+
 source $(dirname $0)/api
 push(){
 	echo "$1: $2"
