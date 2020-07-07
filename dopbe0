@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# replace ::ORBITAL:: with filename.gbw
+# replace ::CHARGE:: with charge and spin
+# replace ::COORDS:: with nafileme.xyz
+template=PBE0
+
+make_pbe0(){
+	output=$(echo $1 | sed 's/bp86.inp$/Wsmd.PBE0.inp/g')
+	basename=$(echo $1 | sed 's/bp86.inp$/bp86./g')
+	
+	numbers=$(tail -n1 $1 | sed 's/.*xyzfile[ ]*\(\(-\|\)[0-9]*\)[ ]*\(\(-\|\)[0-9]*\).*/\1 \3/g')
+	
+	cp $template $output
+	sed -i 's/::ORBITAL::/'$basename'gbw/g' $output
+	sed -i 's/::COORDS::/'$basename'xyz/g' $output
+	sed -i 's/::CHARGE::/'"$numbers"'/g' $output
+	echo "finished $output"
+}
+
+# fill out the template for every bp86 input file
+for f in *.bp86.inp; do 
+	make_pbe0 $f
+done

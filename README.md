@@ -1,2 +1,2 @@
-# pushorca
-use pushbullet to notify your phone about orca tasks on the irvine hpc cluster 
+# hpc-scripts
+a collection of scripts i've made for my brother for use on the irvine hpc cluster
