@@ -4,7 +4,17 @@
 # replace ::COORDS:: with filename.xyz
 template=PBE0
 
+if ! [[ -f $template ]]; then
+	echo "error: template file $template does not exist"
+	exit 1
+fi 
+
 make_pbe0(){
+	if ! [[ -f $1 ]]; then
+		echo "error: input file $1 does not exist"	
+		return 1
+	fi
+	echo $f
 	output=$(echo $1 | sed 's/bp86.inp$/Wsmd.PBE0.inp/g')
 	basename=$(echo $1 | sed 's/bp86.inp$/bp86./g')
 	
@@ -14,10 +24,20 @@ make_pbe0(){
 	sed -i 's/::ORBITAL::/'$basename'gbw/g' $output
 	sed -i 's/::COORDS::/'$basename'xyz/g' $output
 	sed -i 's/::CHARGE::/'"$numbers"'/g' $output
-	echo "finished $output"
+	echo "successfully created $output"
 }
 
-# fill out the template for every bp86 input file
-for f in *.bp86.inp; do 
-	make_pbe0 $f
-done
+if [[ "$#" -gt "0" ]]; then
+	for f in "$@"; do
+		make_pbe0 $f
+	done
+else
+	if ! ls *.bp86.inp &>> /dev/null; then
+		echo "error: no bp86.inp files exist"
+		exit 1
+	fi
+	for f in *.bp86.inp; do 
+		make_pbe0 $f
+	done
+fi
+	
