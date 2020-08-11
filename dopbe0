@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# author:    Grant Pauker
+# email:     grantpauker@gmail.com
+#
 # replace ::ORBITAL:: with filename.gbw
 # replace ::CHARGE:: with charge and spin
 # replace ::COORDS:: with filename.xyz
@@ -14,7 +17,6 @@ make_pbe0(){
 		echo "error: input file $1 does not exist"	
 		return 1
 	fi
-	echo $f
 	output=$(echo $1 | sed 's/bp86.inp$/Wsmd.PBE0.inp/g')
 	basename=$(echo $1 | sed 's/bp86.inp$/bp86./g')
 	
