@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# author:    Grant Pauker
+# email:     grantpauker@gmail.com
+#
+# find number of cores and add it to the script
+# find xyz file if it exists and add it to the script
+# find gbw file if it exists and add it to the script
+# find hess file if it exists and add it to the script
+template=~/bin/suborca.template.sh
+
+if ! [[ -f $template ]]; then
+	echo "error: template file $template does not exist"
+	exit 1
+fi 
+
+filename=$1.sh
+if ! [[ -f $1.inp ]]; then
+	echo "error: input file $1.inp does not exist"	
+	exit 1
+fi
+cp $template $filename
+
+
+hours=${2:-72}
+if ! [[ $hours =~ ^[0-9]+$ ]]; then
+	echo "error: hours requested $hours is not a number"
+	exit 1
+fi
+
+cores=$(sed -n '/pal/{s/.*pal nprocs \([0-9]\)*.*/\1/g;p}' $1.inp)
+xyz=$(grep '^[ ]*[^#]\?\* xyzfile .*\.xyz' $1.inp | awk '{print $NF}')
+hess=$(grep '^[ ]*[^#]\?inhessname .*\.hess' $1.inp | awk '{print $NF}')
+gbw=$(grep '^[ ]*[^#]\?%moinp .*\.gbw' $1.inp | awk '{print $NF}')
+
+[[ "" != "$xyz" ]] && echo "xyz file exists, adding it to script" && sed -i 's/::XYZ::/'$xyz'/g' $filename || sed -i '/::XYZ::/{d}' $filename
+[[ "" != "$hess" ]] && echo "hess file exists, adding it to script" && sed -i 's/::HESS::/'$hess'/g' $filename || sed -i '/::HESS::/{d}' $filename
+[[ "" != "$gbw" ]] && echo "gbw file exists, adding it to script" && sed -i 's/::GBW::/'$gbw'/g' $filename || sed -i '/::GBW::/{d}' $filename
+
+sed -i 's/::FILENAME::/'$filename'/g' $filename
+sed -i 's/::HOURS::/'$hours'/g' $filename
+sed -i 's/::CORES::/'$cores'/g' $filename
