@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# author:    Grant Pauker
-# email:     grantpauker@gmail.com
-#
 # replace ::ORBITAL:: with filename.gbw
 # replace ::CHARGE:: with charge and spin
 # replace ::COORDS:: with filename.xyz

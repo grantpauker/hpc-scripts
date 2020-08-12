@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# author:    Grant Pauker
-# email:     grantpauker@gmail.com
-#
 # find number of cores and add it to the script
 # find xyz file if it exists and add it to the script
 # find gbw file if it exists and add it to the script
@@ -29,7 +26,7 @@ if ! [[ $hours =~ ^[0-9]+$ ]]; then
 	exit 1
 fi
 
-cores=$(sed -n '/pal/{s/.*pal nprocs \([0-9]\)*.*/\1/g;p}' $1.inp)
+cores=$(sed -n '/pal/{s/.*pal nprocs \([0-9]*\).*/\1/g;p}' $1.inp)
 xyz=$(grep '^[ ]*[^#]\?\*[ ]*xyzfile .*\.xyz' $1.inp | awk '{print $NF}')
 hess=$(grep '^[ ]*[^#]\?inhessname .*\.hess' $1.inp | awk '{print $NF}')
 gbw=$(grep '^[ ]*[^#]\?%[ ]*moinp .*\.gbw' $1.inp | awk '{print $NF}')
